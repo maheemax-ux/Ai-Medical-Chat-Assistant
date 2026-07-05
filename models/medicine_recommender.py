@@ -10,7 +10,7 @@ import joblib
 
 
 class MedicineRecommender:
-    def __init__(self, model_path: str = "/Users/maheenakther/Downloads/mp1/models/medicine_suggestion.pkl"):
+    def __init__(self, model_path: str = "/models/medicine_suggestion.pkl"):
         self.model_path = model_path
         self.model = None
         self._load()
