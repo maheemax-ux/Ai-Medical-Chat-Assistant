@@ -36,11 +36,11 @@ class MedicineRecommender:
         disease_key = str(disease).strip()
 
         # Look up in the built-in disease-to-medicine mapping
-        if disease_key in DISEASE_MEDICINES:
-            return DISEASE_MEDICINES[disease_key]
+        if disease_key in disease_medicines:
+            return disease_medicines[disease_key]
 
         # Case-insensitive fallback
-        for name, meds in DISEASE_MEDICINES.items():
+        for name, meds in disease_medicines.items():
             if name.lower() == disease_key.lower():
                 return meds
 
