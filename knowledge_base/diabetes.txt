@@ -1,0 +1,13 @@
+Diabetes Mellitus Overview
+
+Diabetes is a chronic metabolic condition characterized by elevated blood glucose levels, resulting from the body's inability to produce enough insulin (Type 1) or effectively use insulin (Type 2).
+
+Common symptoms include increased thirst, frequent urination, unexplained weight loss, fatigue, blurred vision, and slow-healing wounds.
+
+Type 1 diabetes is an autoimmune condition typically diagnosed in children and young adults, requiring lifelong insulin therapy.
+
+Type 2 diabetes is more common and often linked to lifestyle factors such as diet, physical inactivity, and obesity. It can sometimes be managed with lifestyle changes, oral medications (such as metformin), and in some cases insulin.
+
+Management typically involves blood glucose monitoring, a balanced diet low in refined sugars, regular physical activity, and medication as prescribed by a healthcare provider. Long-term uncontrolled diabetes can lead to complications including cardiovascular disease, kidney damage, nerve damage, and eye problems.
+
+Patients experiencing symptoms of very high or very low blood sugar (confusion, fainting, seizures) should seek emergency medical care immediately.

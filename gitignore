@@ -1,0 +1,17 @@
+# Secrets — never commit real API keys
+.streamlit/secrets.toml
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# Generated / cached data
+data/*.npy
+data/*.meta.pkl
+
+# OS junk
+.DS_Store
