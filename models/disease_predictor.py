@@ -53,7 +53,7 @@ DISEASE_LABELS = {
 
 
 class DiseasePredictor:
-    def __init__(self, model_path: str = "/models/RANmodel.pkl"):
+    def __init__(self, model_path: str = "models/RANmodel.pkl"):
         self.model_path = model_path
         self.model = None
         self.symptom_list = None  
