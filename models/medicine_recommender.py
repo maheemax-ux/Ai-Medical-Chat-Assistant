@@ -1,12 +1,16 @@
-
-
 import pickle
 import numpy as np
 import pandas as pd
 import joblib
 
 
-
+disease_medicines = {
+    "Diabetes": ["Metformin", "Insulin", "Glipizide"],
+    "Hypertension": ["Amlodipine", "Losartan", "Hydrochlorothiazide"],
+    "Common Cold": ["Paracetamol", "Antihistamines", "Decongestants"],
+    "Flu": ["Oseltamivir", "Paracetamol", "Rest and fluids"],
+    # add every disease label your model/classes can output
+}
 
 
 class MedicineRecommender:
@@ -17,7 +21,6 @@ class MedicineRecommender:
 
     def _load(self):
         try:
-            # Try joblib first (standard for scikit-learn models)
             self.model = joblib.load(self.model_path)
         except Exception:
             try:
@@ -28,18 +31,15 @@ class MedicineRecommender:
 
     @property
     def is_loaded(self) -> bool:
-        # Medicine recommendations work via lookup even without a model
         return True
 
     def recommend(self, disease):
         """Return medicine suggestions for a given disease name."""
         disease_key = str(disease).strip()
 
-        # Look up in the built-in disease-to-medicine mapping
         if disease_key in disease_medicines:
             return disease_medicines[disease_key]
 
-        # Case-insensitive fallback
         for name, meds in disease_medicines.items():
             if name.lower() == disease_key.lower():
                 return meds
