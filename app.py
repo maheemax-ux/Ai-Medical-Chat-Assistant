@@ -1,11 +1,6 @@
 import streamlit as st
 from config import LLM_PROVIDER, OPENAI_API_KEY, ANTHROPIC_API_KEY, GEMINI_API_KEY
 
-st.write("Provider:", repr(LLM_PROVIDER))
-st.write("OpenAI key set:", bool(OPENAI_API_KEY))
-st.write("Anthropic key set:", bool(ANTHROPIC_API_KEY))
-st.write("Gemini key set:", bool(GEMINI_API_KEY))
-st.write("st.secrets keys available:", list(st.secrets.keys()) if hasattr(st, "secrets") else "no secrets object")
 import os
 os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")
 
