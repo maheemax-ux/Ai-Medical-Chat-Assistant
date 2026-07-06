@@ -122,14 +122,24 @@ class RAGEngine:
                     "more reference documents to knowledge_base/."
                 )
             else:
-                bullets = "\n\n".join(
-                    f"**{r['source']}**\n{r['text']}" for r in combined
-                )
+                sections = []
+                for i, r in enumerate(combined, 1):
+                    source = r.get('source', 'Unknown')
+                    text = r.get('text', '').strip()
+                    # Ensure text has proper line breaks for markdown
+                    # Replace single newlines with double newlines for markdown paragraph breaks
+                    formatted_text = text.replace('\n', '  \n')
+                    sections.append(
+                        f"### 📄 Source {i}: {source}\n\n"
+                        f"{formatted_text}"
+                    )
+                bullets = "\n\n---\n\n".join(sections)
                 answer_text = (
-                    "*No AI model is configured — showing the raw information "
+                    "> ⚠️ *No AI model is configured — showing the raw information "
                     "found for your question instead of a generated summary. "
                     "Set `LLM_PROVIDER` and an API key in `config.py` to enable "
-                    "AI-written answers.*\n\n" + bullets
+                    "AI-written answers.*\n\n"
+                    + bullets
                 )
             return {
                 "answer": f"{answer_text}\n\n{MEDICAL_DISCLAIMER}",
@@ -143,15 +153,22 @@ class RAGEngine:
 
         system_prompt = (
             "You are a careful, evidence-based medical information assistant. "
-            "Answer the user's health question using ONLY the provided context "
+            "Answer the user's health question using the provided context "
             "(which may include local reference notes, PubMed abstracts, and "
             "MedlinePlus summaries) when it's relevant. If the context doesn't "
             "fully cover the question, say so and give general, cautious "
             "medical information. Never provide a definitive diagnosis — "
             "always recommend consulting a licensed healthcare professional "
-            "for diagnosis or treatment decisions. Keep answers clear and "
-            "concise, and mention when information comes from recent medical "
-            "literature vs general knowledge."
+            "for diagnosis or treatment decisions.\n\n"
+            "IMPORTANT FORMATTING RULES:\n"
+            "- Provide a DETAILED and THOROUGH answer using multiple paragraphs.\n"
+            "- Use markdown formatting: headings (##, ###), bullet points, bold text.\n"
+            "- Structure your answer with clear sections like: Overview, Causes, "
+            "Symptoms, Treatment, When to See a Doctor.\n"
+            "- Include all relevant information from the provided context.\n"
+            "- Mention when information comes from recent medical literature vs general knowledge.\n"
+            "- Do NOT give a single-line or single-paragraph answer. Always provide "
+            "a comprehensive, well-organized response."
         )
 
         user_prompt = f"Context:\n{context_text}\n\nQuestion: {query}"
@@ -162,6 +179,37 @@ class RAGEngine:
         messages.append({"role": "user", "content": user_prompt})
 
         reply = self.llm.chat(messages)
+
+        # If the LLM call failed, fall back to showing retrieved context
+        if reply.startswith("[LLM ERROR]") or reply.startswith("[NO_LLM]"):
+            error_msg = reply
+            if combined:
+                sections = []
+                for i, r in enumerate(combined, 1):
+                    source = r.get('source', 'Unknown')
+                    text = r.get('text', '').strip()
+                    formatted_text = text.replace('\n', '  \n')
+                    sections.append(
+                        f"### 📄 Source {i}: {source}\n\n"
+                        f"{formatted_text}"
+                    )
+                context_display = "\n\n---\n\n".join(sections)
+                answer_text = (
+                    f"> ⚠️ **LLM Error:** {error_msg}\n>\n"
+                    f"> *Showing retrieved information instead:*\n\n"
+                    + context_display
+                )
+            else:
+                answer_text = (
+                    f"⚠️ **LLM Error:** {error_msg}\n\n"
+                    "No matching information was found in the knowledge base either."
+                )
+            return {
+                "answer": f"{answer_text}\n\n{MEDICAL_DISCLAIMER}",
+                "sources": source_labels,
+                "blocked": False,
+            }
+
         reply_with_disclaimer = f"{reply}\n\n{MEDICAL_DISCLAIMER}"
 
         return {
