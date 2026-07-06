@@ -26,7 +26,7 @@ GEMINI_API_KEY = get_secret("GEMINI_API_KEY", "")
 GEMINI_MODEL = get_secret("GEMINI_MODEL", "gemini-2.5-flash")
 
 LLM_TEMPERATURE = 0.2
-LLM_MAX_TOKENS = 600
+LLM_MAX_TOKENS = 2048
 LLM_TIMEOUT_SECONDS = 60
 
 KNOWLEDGE_BASE_DIR = os.path.join(os.path.dirname(__file__), "knowledge_base")
